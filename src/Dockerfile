@@ -1,6 +1,6 @@
 FROM openjdk:11.0.1-jdk-slim-stretch AS build-env
 ARG JAR=spring-petclinic-2.4.2.jar
-ADD . /app
+ADD .. /app
 WORKDIR /app
 RUN sh ./mvnw clean package -DskipTests=true
 
