@@ -1,7 +1,13 @@
-FROM openjdk:8-jdk-alpine
-ARG JAR_FILE=target/*.jar
-
+FROM openjdk:11.0.1-jdk-slim-stretch AS build-env
+ARG JAR=spring-petclinic-2.4.2.jar
+ADD . /app
+WORKDIR /app
 RUN sh ./mvnw clean package -DskipTests=true
 
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+
+FROM openjdk:11.0.1-jre-slim-stretch
+COPY --from=build-env /app/target/$JAR /app/app.jar
+WORKDIR /app
+CMD ["java", "-jar", "app.jar"]
+
+EXPOSE 8080
